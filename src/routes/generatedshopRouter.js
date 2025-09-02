@@ -1,50 +1,31 @@
 const express = require("express");
-const generatedshopRouter = express.Router();
-generatedshopRouter
-  .route("/")
-  .all((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    next();
-  })
-  .get((req, res) => {
-    res.end("Displaying the shop you generated");
-  })
-  .post((req, res) => {
-    res.end(
-      `Will add the shop: ${req.body.name} with description: ${req.body.description}`
-    );
-  })
-  .put((req, res) => {
-    res.statusCode = 403;
-    res.end("PUT operation not supported on /shop");
-  })
-  .delete((req, res) => {
-    res.end("Deleting all shop");
-  });
+const {
+  getAllGeneratedShops,
+  getGeneratedShopById,
+  createGeneratedShop,
+  generateRandomShop,
+  updateGeneratedShop,
+  deleteAllGeneratedShops,
+  deleteGeneratedShopById,
+} = require("../controllers/generatedshopController");
 
-generatedshopRouter
-  .route("/:generatedshopId")
-  .all((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    next();
-  })
-  .get((req, res) => {
-    res.end("Displaying the shop by Id");
-  })
-  .post((req, res) => {
-    res.end(
-      `Will add the shop: ${req.body.name} with description: ${req.body.description}`
-    );
-  })
-  .put((req, res) => {
-    res.statusCode = 403;
-    res.end("PUT operation not supported on /shop");
-  })
-  .delete((req, res) => {
-    res.end("Deleting all shop");
-  });
+const router = express.Router();
 
+// Rotas para /generatedshop
+router.route("/")
+  .get(getAllGeneratedShops)             // GET /generatedshop
+  .post(createGeneratedShop)             // POST /generatedshop (manual)
+  .put((req, res) => res.status(403).json({ error: "PUT operation not supported on /generatedshop" }))
+  .delete(deleteAllGeneratedShops);      // DELETE /generatedshop
 
-module.exports = generatedshopRouter;
+// Rota para geração aleatória
+router.route("/generate")
+  .post(generateRandomShop);             // POST /generatedshop/generate
+
+// Rotas para /generatedshop/:shopId
+router.route("/:shopId")
+  .get(getGeneratedShopById)             // GET /generatedshop/:shopId
+  .put(updateGeneratedShop)              // PUT /generatedshop/:shopId
+  .delete(deleteGeneratedShopById);      // DELETE /generatedshop/:shopId
+
+module.exports = router;

@@ -1,28 +1,31 @@
-const express = require("express");
-const myshopsRouter = express.Router();
-myshopsRouter
-  .route("/")
-  .all((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    next();
-  })
-  .get((req, res) => {
-    res.end("Will display all the shop to you");
-  })
-  .post((req, res) => {
-    res.end(
-      `Will add the shop: ${req.body.name} with description: ${req.body.description}`
-    );
-  })
-  .put((req, res) => {
-    res.statusCode = 403;
-    res.end("PUT operation not supported on /shop");
-  })
-  .delete((req, res) => {
-    res.end("Deleting all shop");
-  });
-  
+const express = require('express');
+const {
+  getAllMyShops,
+  getMyShopById,
+  createMyShop,
+  updateMyShop,
+  deleteAllMyShops,
+  deleteMyShopById
+} = require('../controllers/myShopController');
 
+const myshopsRouter = express.Router();
+
+// Optional test authentication
+const testAuth = (req, res, next) => {
+  // Simulate a logged-in user
+  req.user = { _id: '64f123456789abcdef123456' }; // replace with real ObjectId
+  next();
+};
+myshopsRouter.use(testAuth);
+
+myshopsRouter.route('/')
+  .get(getAllMyShops)
+  .post(createMyShop)
+  .delete(deleteAllMyShops);
+
+myshopsRouter.route('/:shopId')
+  .get(getMyShopById)
+  .put(updateMyShop)
+  .delete(deleteMyShopById);
 
 module.exports = myshopsRouter;
