@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/magicshop';
+const MONGO_URI = 'mongodb://127.0.0.1:27017/rollForShop';
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,

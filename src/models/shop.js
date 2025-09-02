@@ -1,5 +1,3 @@
-src/models/shop.js
-
 const mongoose = require('mongoose');
 
 const shopSchema = new mongoose.Schema({
@@ -7,4 +5,5 @@ const shopSchema = new mongoose.Schema({
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }],
 });
 
-module.exports = mongoose.model('Shop', shopSchema);
+const Shop = mongoose.model('Shop', shopSchema);
+module.exports = Shop;
