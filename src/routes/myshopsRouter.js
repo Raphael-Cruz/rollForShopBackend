@@ -1,6 +1,6 @@
 const express = require("express");
-const generatedshopRouter = express.Router();
-generatedshopRouter
+const myshopsRouter = express.Router();
+myshopsRouter
   .route("/")
   .all((req, res, next) => {
     res.statusCode = 200;
@@ -8,7 +8,7 @@ generatedshopRouter
     next();
   })
   .get((req, res) => {
-    res.end("Displaying the shop you generated");
+    res.end("Will display all the shop to you");
   })
   .post((req, res) => {
     res.end(
@@ -22,7 +22,7 @@ generatedshopRouter
   .delete((req, res) => {
     res.end("Deleting all shop");
   });
+  
 
 
-
-module.exports = generatedshopRouter;
+module.exports = myshopsRouter;
