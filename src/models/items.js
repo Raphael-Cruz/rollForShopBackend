@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const reqAttuneTagSchema = new mongoose.Schema({
   class: { type: String },
-}, { _id: false });
+});
 
 const itemSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -16,7 +16,7 @@ const itemSchema = new mongoose.Schema({
   reqAttuneTags: [reqAttuneTagSchema],
   wondrous: { type: Boolean },
   weapon: { type: Boolean },
-  baseItem: { type: String },
+  baseItem: { type: String },   
   weaponCategory: { type: String },
   property: [String],
   dmg1: { type: String },

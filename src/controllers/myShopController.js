@@ -1,23 +1,19 @@
 const MyShop = require('../models/myshop');
-const mongoose = require('mongoose');
 
-// For testing: create a fake user if req.user missing
-const TEST_USER_ID = '64f123456789abcdef123456'; // replace with any valid ObjectId
-
+// Get all shops
 exports.getAllMyShops = async (req, res) => {
   try {
-    const userId = req.user?._id || TEST_USER_ID;
-    const shops = await MyShop.find({ user: userId });
+    const shops = await MyShop.find();
     res.status(200).json(shops);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+// Get a shop by ID
 exports.getMyShopById = async (req, res) => {
   try {
-    const userId = req.user?._id || TEST_USER_ID;
-    const shop = await MyShop.findOne({ _id: req.params.shopId, user: userId });
+    const shop = await MyShop.findById(req.params.shopId);
     if (!shop) return res.status(404).json({ error: "MyShop not found" });
     res.json(shop);
   } catch (err) {
@@ -25,16 +21,14 @@ exports.getMyShopById = async (req, res) => {
   }
 };
 
+// Create a new shop
 exports.createMyShop = async (req, res) => {
   try {
-    const userId = req.user?._id || TEST_USER_ID;
-
     const myShop = await MyShop.create({
       name: req.body.name,
-      items: req.body.items ?? [],
-      user: userId
+      items: req.body.items ?? []
+      
     });
-
     res.status(201).json(myShop);
   } catch (err) {
     console.error(err);
@@ -42,16 +36,14 @@ exports.createMyShop = async (req, res) => {
   }
 };
 
+// Update a shop by ID
 exports.updateMyShop = async (req, res) => {
   try {
-    const userId = req.user?._id || TEST_USER_ID;
-
-    const shop = await MyShop.findOneAndUpdate(
-      { _id: req.params.shopId, user: userId },
+    const shop = await MyShop.findByIdAndUpdate(
+      req.params.shopId,
       req.body,
       { new: true }
     );
-
     if (!shop) return res.status(404).json({ error: "MyShop not found" });
     res.json(shop);
   } catch (err) {
@@ -59,20 +51,20 @@ exports.updateMyShop = async (req, res) => {
   }
 };
 
+// Delete all shops
 exports.deleteAllMyShops = async (req, res) => {
   try {
-    const userId = req.user?._id || TEST_USER_ID;
-    await MyShop.deleteMany({ user: userId });
+    await MyShop.deleteMany();
     res.json({ message: "All MyShops deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+// Delete a shop by ID
 exports.deleteMyShopById = async (req, res) => {
   try {
-    const userId = req.user?._id || TEST_USER_ID;
-    const shop = await MyShop.findOneAndDelete({ _id: req.params.shopId, user: userId });
+    const shop = await MyShop.findByIdAndDelete(req.params.shopId);
     if (!shop) return res.status(404).json({ error: "MyShop not found" });
     res.json({ message: `MyShop ${req.params.shopId} deleted` });
   } catch (err) {
