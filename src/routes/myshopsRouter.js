@@ -1,5 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
+const { checkLimit } = require('../middleware/checkLimit');
 const {
   getAllMyShops,
   getMyShopById,
@@ -11,12 +12,11 @@ const {
 
 const myshopsRouter = express.Router();
 
-// Apply authentication to ALL routes in this router
 myshopsRouter.use(auth);
 
 myshopsRouter.route('/')
   .get(getAllMyShops)
-  .post(createMyShop)
+  .post(checkLimit('shop'), createMyShop)
   .delete(deleteAllMyShops);
 
 myshopsRouter.route('/:shopId')

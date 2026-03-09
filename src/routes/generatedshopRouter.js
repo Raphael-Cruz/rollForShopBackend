@@ -1,4 +1,6 @@
 const express = require("express");
+const { checkLimit } = require('../middleware/checkLimit');
+const optionalAuth = require('../middleware/optionalAuth');
 const {
   getAllGeneratedShops,
   getGeneratedShopById,
@@ -11,21 +13,19 @@ const {
 
 const router = express.Router();
 
-// Rotas para /generatedshop
 router.route("/")
-  .get(getAllGeneratedShops)             // GET /generatedshop
-  .post(createGeneratedShop)             // POST /generatedshop (manual)
-  .put((req, res) => res.status(403).json({ error: "PUT operation not supported on /generatedshop" }))
-  .delete(deleteAllGeneratedShops);      // DELETE /generatedshop
+  .get(getAllGeneratedShops)
+  .post(createGeneratedShop)
+  .put((req, res) => res.status(403).json({ error: "PUT not supported" }))
+  .delete(deleteAllGeneratedShops);
 
-// Rota para geração aleatória
+
 router.route("/generate")
-  .post(generateRandomShop);             // POST /generatedshop/generate
+  .post(optionalAuth, checkLimit('shop'), generateRandomShop);
 
-// Rotas para /generatedshop/:shopId
 router.route("/:shopId")
-  .get(getGeneratedShopById)             // GET /generatedshop/:shopId
-  .put(updateGeneratedShop)              // PUT /generatedshop/:shopId
-  .delete(deleteGeneratedShopById);      // DELETE /generatedshop/:shopId
+  .get(getGeneratedShopById)
+  .put(updateGeneratedShop)
+  .delete(deleteGeneratedShopById);
 
 module.exports = router;

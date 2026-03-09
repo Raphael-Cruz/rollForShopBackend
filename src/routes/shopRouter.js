@@ -1,5 +1,7 @@
 const express = require("express");
-const { 
+const { checkLimit } = require('../middleware/checkLimit');
+
+const {
   getAllShops,
   getShopById,
   createShop,
